@@ -1,0 +1,29 @@
+services:
+  mongo:
+    image: mongo
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  backend:
+    build: ./back
+    container_name: backend-container
+    ports:
+      - "3002:3001"
+    environment:
+      MONGO_URI: mongodb://mongo:27017/familyTree
+    depends_on:
+      - mongo
+
+  frontend:
+    build: ./front 
+    container_name: front-container
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+volumes:
+  mongo-data:
